@@ -7,9 +7,9 @@ public class Playlist {
     private String id;
     private String name;
     private AlbumCover[] images;
-    private PlaylistTracks tracks;
+    private ResponseTracks tracks;
 
-    public Playlist(String href, String id, String name, AlbumCover[] images, PlaylistTracks tracks) {
+    public Playlist(String href, String id, String name, AlbumCover[] images, ResponseTracks tracks) {
         this.href = href;
         this.id = id;
         this.name = name;
@@ -49,11 +49,11 @@ public class Playlist {
         this.images = images;
     }
 
-    public PlaylistTracks getTracks() {
+    public ResponseTracks getTracks() {
         return tracks;
     }
 
-    public void setTracks(PlaylistTracks tracks) {
+    public void setTracks(ResponseTracks tracks) {
         this.tracks = tracks;
     }
 
@@ -70,6 +70,16 @@ public class Playlist {
                     coverUrl = this.getImages()[1].getUrl();
                 }
             }
+        }
+
+        return coverUrl;
+    }
+
+    public String getCoverURL640() {
+        String coverUrl = "";
+
+        if (this.getImages() != null) {
+            coverUrl = this.getImages()[0].getUrl();
         }
 
         return coverUrl;

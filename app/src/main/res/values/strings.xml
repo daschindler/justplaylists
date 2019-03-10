@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">JustPlaylists</string>
+    <string name="app_name">Simple Lists</string>
+    <string name="play">Play</string>
+    <string name="artists_songs_or_podcasts">Artists, songs or podcasts</string>
+    <string name="currently_playing">Currently playing</string>
+    <string name="artist">Artist</string>
 </resources>

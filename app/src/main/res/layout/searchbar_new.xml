@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="74dp"
+    android:gravity="center"
+    android:background="@color/window_background">
+
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="54dp"
+
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal"
+        android:id="@+id/ll_search_and_queue"
+        android:background="@drawable/roundedbutton_white">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_weight="1"/>
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:src="@drawable/fine_search_small"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="52dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:text="@string/artists_songs_or_podcasts"
+            android:textStyle="bold"
+            android:textSize="7pt"
+            android:background="@drawable/roundedbutton_white"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+</LinearLayout>

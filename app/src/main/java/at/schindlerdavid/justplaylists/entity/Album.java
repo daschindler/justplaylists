@@ -45,6 +45,10 @@ public class Album {
         this.name = name;
     }
 
+    public AlbumCover[] getImages() {
+        return images;
+    }
+
     public String artistsToString() {
         String artistsString = "";
 
@@ -56,5 +60,33 @@ public class Album {
         }
 
         return artistsString;
+    }
+
+    public String getCoverURL64() {
+        String coverUrl = "";
+
+        if (this.images.length > 0) {
+            coverUrl = this.images[this.images.length-1].getUrl();
+        }
+
+        return coverUrl;
+    }
+
+    public String getCoverURL300() {
+        String coverUrl = "";
+
+        if (this.getImages() != null) {
+            if (this.getImages().length < 2) {
+                if (this.getImages().length != 0) {
+                    coverUrl = this.getImages()[0].getUrl();
+                }
+            } else {
+                if (this.getImages().length != 0) {
+                    coverUrl = this.getImages()[1].getUrl();
+                }
+            }
+        }
+
+        return coverUrl;
     }
 }
