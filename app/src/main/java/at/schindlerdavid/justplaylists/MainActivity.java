@@ -58,9 +58,6 @@ public class MainActivity extends AppCompatActivity {
         SetupViews();
         SetSpotifyCallback();
         dataRepository.initSpotifyRemote(this);
-        playlistAdapter = new PlaylistRecycleAdapter(DataRepository.getPlaylists(), playlistChosenCallback);
-        playlistDetailRecycleAdapter = new PlaylistDetailRecycleAdapter(DataRepository.getCurrentShowingTracks());
-        playlistRecyclerView.setAdapter(playlistAdapter);
 
         playlistChosenCallback = new PlaylistChosenCallback() {
             @Override
@@ -75,6 +72,9 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         };
+        playlistAdapter = new PlaylistRecycleAdapter(DataRepository.getPlaylists(), playlistChosenCallback);
+        playlistDetailRecycleAdapter = new PlaylistDetailRecycleAdapter(DataRepository.getCurrentShowingTracks());
+        playlistRecyclerView.setAdapter(playlistAdapter);
 
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override

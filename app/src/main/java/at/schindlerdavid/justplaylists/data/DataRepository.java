@@ -194,8 +194,33 @@ public class DataRepository {
                 if (response.body().getNext() != null) {
                     doPlaylistCall(offset+20, playlistsLoadedCallback);
                 } else {
+                    List<Playlist> playlists = DataRepository.getPlaylists();
+                    boolean playlistAlreadyThere = false;
+
+                    for (int i = 0; i < playlists.size(); i++) {
+                        if (playlists.get(i).getName().equals(DataRepository.QUEUE_PLAYLIST_NAME)) {
+                            playlistAlreadyThere = true;
+                            DataRepository.getPlaylists().remove(i);
+                        }
+                    }
+
+                    if (!playlistAlreadyThere) {
+                        if (!userId.equals("")) {
+                            Call<PostPlaylist> postPlaylistCall = apiService.insertPlaylist(userId, new PostPlaylist(QUEUE_PLAYLIST_NAME, "is used from simple playlists as queue", false));
+                            postPlaylistCall.enqueue(new Callback<PostPlaylist>() {
+                                @Override
+                                public void onResponse(Call<PostPlaylist> call, Response<PostPlaylist> response) {
+                                    Log.d("post", String.valueOf(response.code()));
+                                }
+
+                                @Override
+                                public void onFailure(Call<PostPlaylist> call, Throwable t) {
+                                    Log.d("post", "funkt nicht");
+                                }
+                            });
+                        }
+                    }
                     playlistsLoadedCallback.onRequestFinished();
-                    new InitQueuePlaylistTask().execute();
                 }
             }
 
