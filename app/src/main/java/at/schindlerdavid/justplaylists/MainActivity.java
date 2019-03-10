@@ -28,6 +28,7 @@ import at.schindlerdavid.justplaylists.callbacks.SpotifyCallback;
 import at.schindlerdavid.justplaylists.callbacks.TracksLoadedCallback;
 import at.schindlerdavid.justplaylists.data.DataRepository;
 import at.schindlerdavid.justplaylists.entity.Playlist;
+import at.schindlerdavid.justplaylists.helper.DataHelper;
 import at.schindlerdavid.justplaylists.helper.RemoteHelper;
 
 import static com.spotify.sdk.android.authentication.LoginActivity.REQUEST_CODE;
@@ -52,10 +53,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        beginAuthentication();
         dataRepository = new DataRepository(this.getApplication());
+        beginAuthentication();
         SetupViews();
         SetSpotifyCallback();
+        dataRepository.initSpotifyRemote(this);
+        playlistAdapter = new PlaylistRecycleAdapter(DataRepository.getPlaylists(), playlistChosenCallback);
+        playlistDetailRecycleAdapter = new PlaylistDetailRecycleAdapter(DataRepository.getCurrentShowingTracks());
+        playlistRecyclerView.setAdapter(playlistAdapter);
 
         playlistChosenCallback = new PlaylistChosenCallback() {
             @Override
@@ -77,10 +82,6 @@ public class MainActivity extends AppCompatActivity {
                 SetFocusOnAllPlaylists();
             }
         });
-
-        playlistAdapter = new PlaylistRecycleAdapter(DataRepository.getPlaylists(), playlistChosenCallback);
-        playlistDetailRecycleAdapter = new PlaylistDetailRecycleAdapter(DataRepository.getCurrentShowingTracks());
-        playlistRecyclerView.setAdapter(playlistAdapter);
 
         btPlayAll.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,6 +133,12 @@ public class MainActivity extends AppCompatActivity {
             public void onTrackChanged(Track track) {
                 tvCurrentlyPlayingName.setText(track.name);
                 tvCurrentlyPlayingArtist.setText(track.artist.name);
+
+                if (DataRepository.getCurrentQueue().size() > 0) {
+                    if (DataRepository.getCurrentQueue().get(0).getName().equals(track.name)) {
+                        DataRepository.getCurrentQueue().remove(0);
+                    }
+                }
             }
 
             @Override
@@ -145,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        DataRepository.setSpotifyCallback(spotifyCallback);
+        dataRepository.setSpotifyCallback(spotifyCallback);
     }
 
     private void ShowPlaylistDetail(Playlist playlist) {
@@ -219,7 +226,8 @@ public class MainActivity extends AppCompatActivity {
         AuthenticationRequest.Builder builder =
                 new AuthenticationRequest.Builder(DataRepository.getClientId(), AuthenticationResponse.Type.TOKEN, DataRepository.getRedirectUri());
 
-        builder.setScopes(new String[]{"app-remote-control", "playlist-read-private", "playlist-read-collaborative"});
+        builder.setScopes(new String[]{"app-remote-control", "playlist-read-private", "playlist-read-collaborative", "playlist-modify-private", "playlist-modify-public"
+        , "app-remote-control", "playlist-read-collaborative",});
         AuthenticationRequest request = builder.build();
 
         AuthenticationClient.openLoginActivity(MainActivity.this, REQUEST_CODE, request);
@@ -234,12 +242,7 @@ public class MainActivity extends AppCompatActivity {
             switch (response.getType()) {
                 case TOKEN:
                     DataRepository.setResponseToken(response.getAccessToken());
-                    /*StatifyWebRepo.setAccessToken(response.getAccessToken());
-                    requestTracks(50, TimeRange.short_term);
-                    StatifyRepo.setTrackTimeRange(TimeRange.short_term);
-                    requestUserData();
-                    requestArtists(50, TimeRange.short_term);
-                    StatifyRepo.setArtistTimeRang(TimeRange.short_term);*/
+                    dataRepository.loadUser();
                     dataRepository.requestPlaylists(new PlaylistsLoadedCallback() {
                         @Override
                         public void onRequestFinished() {

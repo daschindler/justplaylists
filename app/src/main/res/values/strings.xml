@@ -4,4 +4,5 @@
     <string name="artists_songs_or_podcasts">Artists, songs or podcasts</string>
     <string name="currently_playing">Currently playing</string>
     <string name="artist">Artist</string>
+    <string name="queue">Queue</string>
 </resources>

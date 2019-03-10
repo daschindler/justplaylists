@@ -8,6 +8,6 @@ public class PlaylistApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        DataRepository.initSpotifyRemote(this);
+
     }
 }

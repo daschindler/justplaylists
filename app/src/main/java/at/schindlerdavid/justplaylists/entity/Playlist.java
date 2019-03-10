@@ -60,7 +60,7 @@ public class Playlist {
     public String getCoverURL300() {
         String coverUrl = "";
 
-        if (this.getImages() != null) {
+        if (this.getImages().length > 0) {
             if (this.getImages().length < 2) {
                 if (this.getImages().length != 0) {
                     coverUrl = this.getImages()[0].getUrl();
@@ -78,7 +78,7 @@ public class Playlist {
     public String getCoverURL640() {
         String coverUrl = "";
 
-        if (this.getImages() != null) {
+        if (this.getImages().length > 0) {
             coverUrl = this.getImages()[0].getUrl();
         }
 

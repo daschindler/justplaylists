@@ -11,6 +11,14 @@ public class RemoteHelper {
         playOnSpotify(track.getId(), "track");
     }
 
+    public static void playTrackOnSpotify(Track track, int positionInList) {
+        if (DataRepository.getCurrentQueue().size() == 0) {
+
+        }
+        playOnSpotify(track.getId(), "track");
+
+    }
+
     public static void playAlbumOnSpotify(String albumId) {
         playOnSpotify(albumId, "album");
     }
@@ -20,7 +28,7 @@ public class RemoteHelper {
     }
 
     public static void playOnSpotify(String id, String type) {
-        DataRepository.getCurrentQueue().clear();
+        //DataRepository.getCurrentQueue().clear();
         DataRepository.getSpotifyAppRemote().getPlayerApi().play("spotify:" + type + ":" + id);
     }
 
