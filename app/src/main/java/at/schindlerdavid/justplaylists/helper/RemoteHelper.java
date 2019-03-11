@@ -46,28 +46,13 @@ public class RemoteHelper {
             });
         }
 
-        //playOnSpotify(track.getId(), "track");
-
-    }
-
-    private static String CreateTrackUrisAsString(List<Track> tracks, int positionInList) {
-        StringBuilder uriList = new StringBuilder();
-        int maxSize = tracks.size();
-
-        if (maxSize-positionInList > 100) {
-            maxSize = 100;
-        }
-        for (int i = positionInList; i < maxSize; i++){
-            uriList.append("spotify:track:" + tracks.get(i).getId()+",");
-        }
-        return uriList.toString();
     }
 
     public static void playAlbumOnSpotify(String albumId) {
         playOnSpotify(albumId, "album");
     }
 
-    public static void playPlaylistOnSpotify(String playlistId) {
+    private static void playPlaylistOnSpotify(String playlistId) {
         playOnSpotify(playlistId, "playlist");
     }
 
@@ -75,8 +60,7 @@ public class RemoteHelper {
         playOnSpotify(playlist.getId(), "playlist");
     }
 
-    public static void playOnSpotify(String id, String type) {
-        //DataRepository.getCurrentQueue().clear();
+    private static void playOnSpotify(String id, String type) {
         DataRepository.getSpotifyAppRemote().getPlayerApi().play("spotify:" + type + ":" + id);
     }
 
@@ -96,21 +80,26 @@ public class RemoteHelper {
         DataRepository.getSpotifyAppRemote().getPlayerApi().resume();
     }
 
-    public static void queuePlaylistOnSpotify(String playlistId) {
-        addToQueue(playlistId, "playlist");
-    }
-
     public static void queueTrackOnSpotify(Track track) {
         DataRepository.getCurrentQueue().add(track);
         addToQueue(track.getId(), "track");
     }
 
-    public static void queueAlbumOnSpotify(String albumId) {
-        addToQueue(albumId, "album");
+    private static void addToQueue(String id, String type) {
+        DataRepository.getSpotifyAppRemote().getPlayerApi().queue("spotify:" + type + ":" + id);
     }
 
-    public static void addToQueue(String id, String type) {
-        DataRepository.getSpotifyAppRemote().getPlayerApi().queue("spotify:" + type + ":" + id);
+    private static String CreateTrackUrisAsString(List<Track> tracks, int positionInList) {
+        StringBuilder uriList = new StringBuilder();
+        int maxSize = tracks.size();
+
+        if (maxSize-positionInList > 100) {
+            maxSize = 100;
+        }
+        for (int i = positionInList; i < maxSize; i++){
+            uriList.append("spotify:track:" + tracks.get(i).getId()+",");
+        }
+        return uriList.toString();
     }
 
     private static class ClearTracksFromQueuePlaylistTask extends AsyncTask<Void, Void, Void> {

@@ -28,7 +28,6 @@ import at.schindlerdavid.justplaylists.callbacks.SpotifyCallback;
 import at.schindlerdavid.justplaylists.callbacks.TracksLoadedCallback;
 import at.schindlerdavid.justplaylists.data.DataRepository;
 import at.schindlerdavid.justplaylists.entity.Playlist;
-import at.schindlerdavid.justplaylists.helper.DataHelper;
 import at.schindlerdavid.justplaylists.helper.RemoteHelper;
 
 import static com.spotify.sdk.android.authentication.LoginActivity.REQUEST_CODE;
@@ -53,17 +52,42 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        InitViews();
+        SetupSpotifyInteraction();
+        SetupPlaylistChoosing();
+        SetupViewFunctions();
+    }
+
+    private void InitViews(){
+        ivBack = findViewById(R.id.iv_back);
+        tvTitlebar = findViewById(R.id.titlebar_text);
+        progressBar = findViewById(R.id.progressbar);
+        playlistRecyclerView = findViewById(R.id.rv_all_playlists);
+        RecyclerView.LayoutManager mLayoutManagerTrack = new LinearLayoutManager(getApplicationContext());
+        playlistRecyclerView.setLayoutManager(mLayoutManagerTrack);
+        playlistRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        btPlayAll = findViewById(R.id.bt_play_all);
+        titleBar = findViewById(R.id.main_titlebar);
+        btPlayNext = findViewById(R.id.iv_next_track);
+        btPlayPrev = findViewById(R.id.iv_last_track);
+        tvCurrentlyPlayingName = findViewById(R.id.bottombar_playing_name);
+        tvCurrentlyPlayingArtist = findViewById(R.id.bottombar_playing_artist);
+        btQueue = findViewById(R.id.iv_bottombar_queue);
+        bottomBarPlaying = findViewById(R.id.bottombar_playing);
+    }
+
+    private void SetupSpotifyInteraction() {
         dataRepository = new DataRepository(this.getApplication());
         beginAuthentication();
-        SetupViews();
         SetSpotifyCallback();
         dataRepository.initSpotifyRemote(this);
+    }
 
+    private void SetupPlaylistChoosing() {
         playlistChosenCallback = new PlaylistChosenCallback() {
             @Override
             public void onPlaylistChosen(final int position) {
                 SetLoadingScreen();
-
                 dataRepository.requestBelongingTracks(DataRepository.getPlaylists().get(position).getId(), new TracksLoadedCallback() {
                     @Override
                     public void onTracksLoaded() {
@@ -72,6 +96,9 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         };
+    }
+
+    private void SetupViewFunctions() {
         playlistAdapter = new PlaylistRecycleAdapter(DataRepository.getPlaylists(), playlistChosenCallback);
         playlistDetailRecycleAdapter = new PlaylistDetailRecycleAdapter(DataRepository.getCurrentShowingTracks());
         playlistRecyclerView.setAdapter(playlistAdapter);
@@ -124,7 +151,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
 
     private void SetSpotifyCallback() {
@@ -194,24 +220,6 @@ public class MainActivity extends AppCompatActivity {
         playlistRecyclerView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
 
-    }
-
-    private void SetupViews(){
-        ivBack = findViewById(R.id.iv_back);
-        tvTitlebar = findViewById(R.id.titlebar_text);
-        progressBar = findViewById(R.id.progressbar);
-        playlistRecyclerView = findViewById(R.id.rv_all_playlists);
-        RecyclerView.LayoutManager mLayoutManagerTrack = new LinearLayoutManager(getApplicationContext());
-        playlistRecyclerView.setLayoutManager(mLayoutManagerTrack);
-        playlistRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        btPlayAll = findViewById(R.id.bt_play_all);
-        titleBar = findViewById(R.id.main_titlebar);
-        btPlayNext = findViewById(R.id.iv_next_track);
-        btPlayPrev = findViewById(R.id.iv_last_track);
-        tvCurrentlyPlayingName = findViewById(R.id.bottombar_playing_name);
-        tvCurrentlyPlayingArtist = findViewById(R.id.bottombar_playing_artist);
-        btQueue = findViewById(R.id.iv_bottombar_queue);
-        bottomBarPlaying = findViewById(R.id.bottombar_playing);
     }
 
     private void SetFocusOnAllPlaylists() {
