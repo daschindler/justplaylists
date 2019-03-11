@@ -1,6 +1,8 @@
-package at.schindlerdavid.justplaylists.entity;
+package at.schindlerdavid.justplaylists.entity.api;
 
 import java.util.List;
+
+import at.schindlerdavid.justplaylists.entity.Playlist;
 
 public class ResponsePlaylist {
     private String href;

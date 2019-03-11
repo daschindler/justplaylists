@@ -1,15 +1,19 @@
 package at.schindlerdavid.justplaylists.helper;
 
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import at.schindlerdavid.justplaylists.data.DataRepository;
 import at.schindlerdavid.justplaylists.entity.Playlist;
-import at.schindlerdavid.justplaylists.entity.PostTrack;
+import at.schindlerdavid.justplaylists.entity.api.PostPlaylist;
+import at.schindlerdavid.justplaylists.entity.api.PostTrack;
 import at.schindlerdavid.justplaylists.entity.Track;
+import at.schindlerdavid.justplaylists.entity.api.PutTrack;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -21,13 +25,18 @@ public class RemoteHelper {
 
     public static void playTrackOnSpotify(Track track, List<Track> tracks, int positionInList) {
         if (DataRepository.getQueuePlaylistId() != null) {
-            PostTrack postTrack = new PostTrack(CreateTrackUris(tracks, positionInList));
             DataRepository.getApiService().insertTrackToPlaylist(DataRepository.getQueuePlaylistId(), CreateTrackUrisAsString(tracks, positionInList)).enqueue(new Callback<PostTrack>() {
                 @Override
                 public void onResponse(Call<PostTrack> call, Response<PostTrack> response) {
                     Log.d("insertTracks", String.valueOf(response.code()));
-                    playPlaylistOnSpotify(DataRepository.getQueuePlaylistId());
-                    //todo: clear playlist
+                    try {
+                        TimeUnit.MILLISECONDS.sleep(500);
+                        playPlaylistOnSpotify(DataRepository.getQueuePlaylistId());
+                        new ClearTracksFromQueuePlaylistTask().execute();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
                 }
 
                 @Override
@@ -41,17 +50,14 @@ public class RemoteHelper {
 
     }
 
-    private static String[] CreateTrackUris(List<Track> tracks, int positionInList) {
-        List<String> uriList = new ArrayList<>();
-        for (int i = positionInList; i < tracks.size(); i++){
-            uriList.add("spotify:track:" + tracks.get(i).getId());
-        }
-        return uriList.toArray(new String[uriList.size()]);
-    }
-
     private static String CreateTrackUrisAsString(List<Track> tracks, int positionInList) {
         StringBuilder uriList = new StringBuilder();
-        for (int i = positionInList; i < tracks.size(); i++){
+        int maxSize = tracks.size();
+
+        if (maxSize-positionInList > 100) {
+            maxSize = 100;
+        }
+        for (int i = positionInList; i < maxSize; i++){
             uriList.append("spotify:track:" + tracks.get(i).getId()+",");
         }
         return uriList.toString();
@@ -105,5 +111,31 @@ public class RemoteHelper {
 
     public static void addToQueue(String id, String type) {
         DataRepository.getSpotifyAppRemote().getPlayerApi().queue("spotify:" + type + ":" + id);
+    }
+
+    private static class ClearTracksFromQueuePlaylistTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                TimeUnit.SECONDS.sleep(2);
+                DataRepository.getApiService().clearQueuePlaylist(DataRepository.getQueuePlaylistId(), "").enqueue(new Callback<PutTrack>() {
+                    @Override
+                    public void onResponse(Call<PutTrack> call, Response<PutTrack> response) {
+                        Log.d("clearTracks", String.valueOf(response.code()));
+                    }
+
+                    @Override
+                    public void onFailure(Call<PutTrack> call, Throwable t) {
+
+                    }
+                });
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+
+            return null;
+        }
     }
 }

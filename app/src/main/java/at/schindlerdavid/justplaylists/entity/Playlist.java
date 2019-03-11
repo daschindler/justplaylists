@@ -1,6 +1,8 @@
 package at.schindlerdavid.justplaylists.entity;
 
 
+import at.schindlerdavid.justplaylists.entity.api.ResponseTracks;
+
 //https://api.spotify.com/v1/users/{user_id}/playlists
 public class Playlist {
     private String href;

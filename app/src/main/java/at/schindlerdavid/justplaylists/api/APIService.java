@@ -1,9 +1,10 @@
 package at.schindlerdavid.justplaylists.api;
 
-import at.schindlerdavid.justplaylists.entity.PostPlaylist;
-import at.schindlerdavid.justplaylists.entity.PostTrack;
-import at.schindlerdavid.justplaylists.entity.ResponsePlaylist;
-import at.schindlerdavid.justplaylists.entity.ResponseTracks;
+import at.schindlerdavid.justplaylists.entity.api.PostPlaylist;
+import at.schindlerdavid.justplaylists.entity.api.PostTrack;
+import at.schindlerdavid.justplaylists.entity.api.PutTrack;
+import at.schindlerdavid.justplaylists.entity.api.ResponsePlaylist;
+import at.schindlerdavid.justplaylists.entity.api.ResponseTracks;
 import at.schindlerdavid.justplaylists.entity.User;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -24,8 +25,10 @@ public interface APIService {
     @GET("/v1/me")
     Call<User> doGetCurrentUser();
 
-    @PUT
-    
+    @PUT ("/v1/playlists/{playlist_id}/tracks")
+    Call<PutTrack> clearQueuePlaylist(
+            @Path(value = "playlist_id", encoded = true) String playlistId,
+            @Query(value = "uris", encoded = true) String uri);
 
     @POST("/v1/playlists/{playlist_id}/tracks")
     @Headers({ "Content-Type: application/json;charset=UTF-8"})

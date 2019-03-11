@@ -1,4 +1,4 @@
-package at.schindlerdavid.justplaylists.entity;
+package at.schindlerdavid.justplaylists.entity.api;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

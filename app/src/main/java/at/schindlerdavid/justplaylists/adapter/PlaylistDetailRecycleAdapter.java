@@ -96,7 +96,7 @@ public class PlaylistDetailRecycleAdapter extends RecyclerView.Adapter<PlaylistD
                 public void onClick(View v) {
                     //RemoteHelper.playTrackOnSpotify(track);
                     RemoteHelper.playTrackOnSpotify(track, trackList, position);
-                    Toast.makeText(holder.itemView.getContext(), "Track is playing!", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(holder.itemView.getContext(), "Track is playing!", Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -104,7 +104,7 @@ public class PlaylistDetailRecycleAdapter extends RecyclerView.Adapter<PlaylistD
                 @Override
                 public boolean onLongClick(View v) {
                     RemoteHelper.queueTrackOnSpotify(track);
-                    Toast.makeText(holder.itemView.getContext(), "Track added to queue!", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(holder.itemView.getContext(), "Track added to queue!", Toast.LENGTH_LONG).show();
                     return true;
                 }
             });

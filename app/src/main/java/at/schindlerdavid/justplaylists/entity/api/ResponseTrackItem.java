@@ -1,7 +1,9 @@
-package at.schindlerdavid.justplaylists.entity;
+package at.schindlerdavid.justplaylists.entity.api;
 
 import java.util.Date;
 import java.util.List;
+
+import at.schindlerdavid.justplaylists.entity.Track;
 
 public class ResponseTrackItem {
     private Date added_at;

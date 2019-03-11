@@ -1,4 +1,4 @@
-package at.schindlerdavid.justplaylists.entity;
+package at.schindlerdavid.justplaylists.entity.api;
 
 import java.util.List;
 

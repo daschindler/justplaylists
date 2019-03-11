@@ -5,14 +5,10 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
 import com.spotify.android.appremote.api.SpotifyAppRemote;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,9 +18,9 @@ import at.schindlerdavid.justplaylists.callbacks.TracksLoadedCallback;
 import at.schindlerdavid.justplaylists.api.APIClient;
 import at.schindlerdavid.justplaylists.api.APIService;
 import at.schindlerdavid.justplaylists.entity.Playlist;
-import at.schindlerdavid.justplaylists.entity.PostPlaylist;
-import at.schindlerdavid.justplaylists.entity.ResponsePlaylist;
-import at.schindlerdavid.justplaylists.entity.ResponseTracks;
+import at.schindlerdavid.justplaylists.entity.api.PostPlaylist;
+import at.schindlerdavid.justplaylists.entity.api.ResponsePlaylist;
+import at.schindlerdavid.justplaylists.entity.api.ResponseTracks;
 import at.schindlerdavid.justplaylists.entity.Track;
 import at.schindlerdavid.justplaylists.entity.User;
 import retrofit2.Call;
