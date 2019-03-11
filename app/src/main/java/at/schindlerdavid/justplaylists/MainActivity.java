@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvTitlebar, tvCurrentlyPlayingName, tvCurrentlyPlayingArtist;
     private ProgressBar progressBar;
     private ImageView btPlayAll, btPlayPrev, btPlayNext, btQueue;
-    private LinearLayout titleBar;
+    private LinearLayout titleBar, bottomBarPlaying;
     private Playlist currentOpenedPlaylist;
 
     private boolean isPaused = true;
@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
             public void onPlaylistChosen(final int position) {
                 SetLoadingScreen();
 
-                playlistDetailRecycleAdapter.setPlaylist(DataRepository.getPlaylists().get(position));
                 dataRepository.requestBelongingTracks(DataRepository.getPlaylists().get(position).getId(), new TracksLoadedCallback() {
                     @Override
                     public void onTracksLoaded() {
@@ -107,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        tvCurrentlyPlayingName.setOnClickListener(new View.OnClickListener() {
+        bottomBarPlaying.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isPaused) {
@@ -212,6 +211,7 @@ public class MainActivity extends AppCompatActivity {
         tvCurrentlyPlayingName = findViewById(R.id.bottombar_playing_name);
         tvCurrentlyPlayingArtist = findViewById(R.id.bottombar_playing_artist);
         btQueue = findViewById(R.id.iv_bottombar_queue);
+        bottomBarPlaying = findViewById(R.id.bottombar_playing);
     }
 
     private void SetFocusOnAllPlaylists() {

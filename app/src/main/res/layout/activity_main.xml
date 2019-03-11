@@ -81,7 +81,8 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:gravity="center"
-                    android:background="?attr/selectableItemBackgroundBorderless">
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:id="@+id/bottombar_playing">
 
                     <TextView
                         android:background="?attr/selectableItemBackgroundBorderless"

@@ -10,6 +10,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -23,11 +24,19 @@ public interface APIService {
     @GET("/v1/me")
     Call<User> doGetCurrentUser();
 
+    @PUT
+    
+
     @POST("/v1/playlists/{playlist_id}/tracks")
     @Headers({ "Content-Type: application/json;charset=UTF-8"})
     Call<PostTrack> insertTrackToPlaylist(
             @Path(value = "playlist_id", encoded = true) String playlistId,
             @Body PostTrack postTrack);
+
+    @POST("/v1/playlists/{playlist_id}/tracks")
+    Call<PostTrack> insertTrackToPlaylist(
+            @Path(value = "playlist_id", encoded = true) String playlistId,
+            @Query(value = "uris", encoded = true) String uris);
 
     @POST("/v1/users/{user_id}/playlists")
     @Headers({ "Content-Type: application/json;charset=UTF-8"})

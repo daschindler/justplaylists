@@ -23,7 +23,6 @@ import at.schindlerdavid.justplaylists.helper.LayoutHelper;
 import at.schindlerdavid.justplaylists.helper.RemoteHelper;
 
 public class PlaylistDetailRecycleAdapter extends RecyclerView.Adapter<PlaylistDetailRecycleAdapter.MyViewHolder>{
-    private Playlist playlist;
     private List<Track> trackList;
 
 
@@ -71,10 +70,6 @@ public class PlaylistDetailRecycleAdapter extends RecyclerView.Adapter<PlaylistD
         this.trackList = trackList;
     }
 
-    public void setPlaylist(Playlist playlist) {
-        this.playlist = playlist;
-    }
-
     @Override
     public PlaylistDetailRecycleAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
@@ -100,7 +95,7 @@ public class PlaylistDetailRecycleAdapter extends RecyclerView.Adapter<PlaylistD
                 @Override
                 public void onClick(View v) {
                     //RemoteHelper.playTrackOnSpotify(track);
-                    RemoteHelper.playTrackOnSpotify(track, trackList, position, playlist.getId());
+                    RemoteHelper.playTrackOnSpotify(track, trackList, position);
                     Toast.makeText(holder.itemView.getContext(), "Track is playing!", Toast.LENGTH_LONG).show();
                 }
             });

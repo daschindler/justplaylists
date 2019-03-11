@@ -47,6 +47,11 @@ public class DataRepository {
 
     private static APIService apiService;
     private static SpotifyCallback spotifyCallback;
+    private static String queuePlaylistId;
+
+    public static String getQueuePlaylistId() {
+        return queuePlaylistId;
+    }
 
     public DataRepository(Application application) {
         apiService = APIClient.getClient().create(APIService.class);
@@ -204,6 +209,7 @@ public class DataRepository {
                     for (int i = 0; i < playlists.size(); i++) {
                         if (playlists.get(i).getName().equals(DataRepository.QUEUE_PLAYLIST_NAME)) {
                             playlistAlreadyThere = true;
+                            DataRepository.setQueuePlaylistId(playlists.get(i).getId());
                             DataRepository.getPlaylists().remove(i);
                         }
                     }
@@ -234,6 +240,12 @@ public class DataRepository {
             }
         });
     }
+
+    private static void setQueuePlaylistId(String playlistId) {
+        DataRepository.queuePlaylistId = playlistId;
+    }
+
+
 
     private static class InitQueuePlaylistTask extends AsyncTask<Void, Void, Void> {
 

@@ -6,7 +6,6 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import at.schindlerdavid.justplaylists.api.APIService;
 import at.schindlerdavid.justplaylists.data.DataRepository;
 import at.schindlerdavid.justplaylists.entity.Playlist;
 import at.schindlerdavid.justplaylists.entity.PostTrack;
@@ -20,20 +19,25 @@ public class RemoteHelper {
         playOnSpotify(track.getId(), "track");
     }
 
-    public static void playTrackOnSpotify(Track track, List<Track> tracks, int positionInList, String playlistId) {
-        PostTrack postTrack = new PostTrack(CreateTrackUris(tracks, positionInList));
-        DataRepository.getApiService().insertTrackToPlaylist(playlistId, postTrack).enqueue(new Callback<PostTrack>() {
-            @Override
-            public void onResponse(Call<PostTrack> call, Response<PostTrack> response) {
-                Log.d("insertTracks", String.valueOf(response.code()));
-            }
+    public static void playTrackOnSpotify(Track track, List<Track> tracks, int positionInList) {
+        if (DataRepository.getQueuePlaylistId() != null) {
+            PostTrack postTrack = new PostTrack(CreateTrackUris(tracks, positionInList));
+            DataRepository.getApiService().insertTrackToPlaylist(DataRepository.getQueuePlaylistId(), CreateTrackUrisAsString(tracks, positionInList)).enqueue(new Callback<PostTrack>() {
+                @Override
+                public void onResponse(Call<PostTrack> call, Response<PostTrack> response) {
+                    Log.d("insertTracks", String.valueOf(response.code()));
+                    playPlaylistOnSpotify(DataRepository.getQueuePlaylistId());
+                    //todo: clear playlist
+                }
 
-            @Override
-            public void onFailure(Call<PostTrack> call, Throwable t) {
+                @Override
+                public void onFailure(Call<PostTrack> call, Throwable t) {
 
-            }
-        });
-        playOnSpotify(track.getId(), "track");
+                }
+            });
+        }
+
+        //playOnSpotify(track.getId(), "track");
 
     }
 
@@ -45,8 +49,20 @@ public class RemoteHelper {
         return uriList.toArray(new String[uriList.size()]);
     }
 
+    private static String CreateTrackUrisAsString(List<Track> tracks, int positionInList) {
+        StringBuilder uriList = new StringBuilder();
+        for (int i = positionInList; i < tracks.size(); i++){
+            uriList.append("spotify:track:" + tracks.get(i).getId()+",");
+        }
+        return uriList.toString();
+    }
+
     public static void playAlbumOnSpotify(String albumId) {
         playOnSpotify(albumId, "album");
+    }
+
+    public static void playPlaylistOnSpotify(String playlistId) {
+        playOnSpotify(playlistId, "playlist");
     }
 
     public static void playPlaylistOnSpotify(Playlist playlist) {
