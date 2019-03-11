@@ -17,11 +17,13 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import at.schindlerdavid.justplaylists.R;
+import at.schindlerdavid.justplaylists.entity.Playlist;
 import at.schindlerdavid.justplaylists.entity.Track;
 import at.schindlerdavid.justplaylists.helper.LayoutHelper;
 import at.schindlerdavid.justplaylists.helper.RemoteHelper;
 
 public class PlaylistDetailRecycleAdapter extends RecyclerView.Adapter<PlaylistDetailRecycleAdapter.MyViewHolder>{
+    private Playlist playlist;
     private List<Track> trackList;
 
 
@@ -69,6 +71,10 @@ public class PlaylistDetailRecycleAdapter extends RecyclerView.Adapter<PlaylistD
         this.trackList = trackList;
     }
 
+    public void setPlaylist(Playlist playlist) {
+        this.playlist = playlist;
+    }
+
     @Override
     public PlaylistDetailRecycleAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
@@ -93,7 +99,8 @@ public class PlaylistDetailRecycleAdapter extends RecyclerView.Adapter<PlaylistD
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    RemoteHelper.playTrackOnSpotify(track);
+                    //RemoteHelper.playTrackOnSpotify(track);
+                    RemoteHelper.playTrackOnSpotify(track, trackList, position, playlist.getId());
                     Toast.makeText(holder.itemView.getContext(), "Track is playing!", Toast.LENGTH_LONG).show();
                 }
             });

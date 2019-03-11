@@ -1,22 +1,48 @@
 package at.schindlerdavid.justplaylists.helper;
 
+
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import at.schindlerdavid.justplaylists.api.APIService;
 import at.schindlerdavid.justplaylists.data.DataRepository;
 import at.schindlerdavid.justplaylists.entity.Playlist;
+import at.schindlerdavid.justplaylists.entity.PostTrack;
 import at.schindlerdavid.justplaylists.entity.Track;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RemoteHelper {
     public static void playTrackOnSpotify(Track track) {
         playOnSpotify(track.getId(), "track");
     }
 
-    public static void playTrackOnSpotify(Track track, int positionInList) {
-        if (DataRepository.getCurrentQueue().size() == 0) {
+    public static void playTrackOnSpotify(Track track, List<Track> tracks, int positionInList, String playlistId) {
+        PostTrack postTrack = new PostTrack(CreateTrackUris(tracks, positionInList));
+        DataRepository.getApiService().insertTrackToPlaylist(playlistId, postTrack).enqueue(new Callback<PostTrack>() {
+            @Override
+            public void onResponse(Call<PostTrack> call, Response<PostTrack> response) {
+                Log.d("insertTracks", String.valueOf(response.code()));
+            }
 
-        }
+            @Override
+            public void onFailure(Call<PostTrack> call, Throwable t) {
+
+            }
+        });
         playOnSpotify(track.getId(), "track");
 
+    }
+
+    private static String[] CreateTrackUris(List<Track> tracks, int positionInList) {
+        List<String> uriList = new ArrayList<>();
+        for (int i = positionInList; i < tracks.size(); i++){
+            uriList.add("spotify:track:" + tracks.get(i).getId());
+        }
+        return uriList.toArray(new String[uriList.size()]);
     }
 
     public static void playAlbumOnSpotify(String albumId) {

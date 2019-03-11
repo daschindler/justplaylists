@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
             public void onPlaylistChosen(final int position) {
                 SetLoadingScreen();
 
+                playlistDetailRecycleAdapter.setPlaylist(DataRepository.getPlaylists().get(position));
                 dataRepository.requestBelongingTracks(DataRepository.getPlaylists().get(position).getId(), new TracksLoadedCallback() {
                     @Override
                     public void onTracksLoaded() {

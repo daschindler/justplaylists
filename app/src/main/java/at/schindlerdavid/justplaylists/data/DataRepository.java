@@ -52,6 +52,10 @@ public class DataRepository {
         apiService = APIClient.getClient().create(APIService.class);
     }
 
+    public static APIService getApiService() {
+        return apiService;
+    }
+
     public static SpotifyAppRemote getSpotifyAppRemote() {
         if(spotifyAppRemote == null) {
             throw new RuntimeException("spotifyappremote is not initialized");
